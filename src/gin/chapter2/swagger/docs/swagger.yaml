@@ -1,0 +1,24 @@
+info:
+  contact: {}
+paths:
+  /login:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses: {}
+      summary: login
+      tags:
+      - login interface
+  /register:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses: {}
+      summary: register
+      tags:
+      - register interface
+swagger: "2.0"
