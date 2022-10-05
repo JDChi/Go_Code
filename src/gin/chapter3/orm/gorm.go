@@ -26,7 +26,7 @@ var gormResp GormResp
 
 func init() {
 	var err error
-	dsn := "root:JDNEW99123@tcp(127.0.0.1:3306)/gorm?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := "root:123456@tcp(127.0.0.1:3306)/gorm?charset=utf8mb4&parseTime=True&loc=Local"
 	gormDB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		fmt.Println("connect to mysql wrong ", err)
