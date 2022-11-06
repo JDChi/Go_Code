@@ -81,8 +81,8 @@ func EncryptByAes(data []byte, key []byte) (string, error) {
 	return base64.StdEncoding.EncodeToString(res), nil
 }
 
-func DecryptByAes(date string, key []byte) ([]byte, error) {
-	dataByte, err := base64.StdEncoding.DecodeString(date)
+func DecryptByAes(data string, key []byte) ([]byte, error) {
+	dataByte, err := base64.StdEncoding.DecodeString(data)
 	if err != nil {
 		return nil, err
 	}
