@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	// 时区转换
+	/////////////////////// timezone
 	nowTime := time.Now()
 	fmt.Printf("nowTime = %v\n", nowTime)
 	// 印尼时区
@@ -17,6 +17,11 @@ func main() {
 	jakartaZeroTime := time.Date(jakartaTime.Year(), jakartaTime.Month(), jakartaTime.Day(),
 		0, 0, 0, 0,
 		jakartaTimezone)
-	fmt.Printf("jakartaTime = %v , jakartaZeroTime = %v", jakartaTime, jakartaZeroTime)
-
+	fmt.Printf("jakartaTime = %v , jakartaZeroTime = %v\n", jakartaTime, jakartaZeroTime)
+	////////////////// add
+	nextTime := nowTime.Add(1 * time.Hour)
+	// 如果是在外面定义的数字，就需要转成 time.Duration 来处理
+	var hour = 2
+	nextTime2 := nowTime.Add(time.Duration(hour) * time.Hour)
+	fmt.Printf("nextTime = %v, nextTime2 = %v", nextTime, nextTime2)
 }
