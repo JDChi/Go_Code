@@ -18,7 +18,7 @@ func main() {
 		0, 0, 0, 0,
 		jakartaTimezone)
 	fmt.Printf("jakartaTime = %v , jakartaZeroTime = %v\n", jakartaTime, jakartaZeroTime)
-	////////////////// add
+	////////////////// add duration
 	nextTime := nowTime.Add(1 * time.Hour)
 	// 如果是在外面定义的数字，就需要转成 time.Duration 来处理
 	var hour = 2
