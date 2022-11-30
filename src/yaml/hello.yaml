@@ -1,0 +1,10 @@
+  myNumber: 1
+  myArray:
+    - "a"
+    - "b"
+    - "c"
+  myStruct:
+      name: "Jack"
+      age: 24
+
+
