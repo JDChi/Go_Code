@@ -96,6 +96,16 @@ func init() {
 
 func main() {
 	// create table
+	createTable()
+
+	// insert
+	insert()
+
+	// select
+	selectTable()
+}
+
+func createTable() {
 	rows, err := global.SqlxDB.MustExec(createStudentInfoTable).RowsAffected()
 	if err != nil {
 		panic(err)
@@ -107,14 +117,14 @@ func main() {
 		panic(err)
 	}
 	fmt.Printf("createStudentScoreTable rows = %d\n", rows)
+}
 
-	// insert
-	// insert student info
+func insert() {
 	result, err := global.SqlxDB.Exec(insertStudentInfo)
 	if err != nil {
 		panic(err)
 	}
-	rows, err = result.RowsAffected()
+	rows, err := result.RowsAffected()
 	if err != nil {
 		panic(err)
 	}
@@ -129,10 +139,11 @@ func main() {
 		panic(err)
 	}
 	fmt.Printf("insertStudentScore rows = %d\n", rows)
+}
 
-	// select
+func selectTable() {
 	var userInfos []UserInfo
-	err = global.SqlxDB.Select(&userInfos, selectAll)
+	err := global.SqlxDB.Select(&userInfos, selectAll)
 	if err != nil {
 		panic(err)
 	}
@@ -149,7 +160,6 @@ func main() {
 	for _, userInfo := range userInfos {
 		fmt.Printf("user info = %v\n", userInfo)
 	}
-
 	err = global.SqlxDB.Select(&userInfos, selectLimit)
 	if err != nil {
 		panic(err)
@@ -158,5 +168,4 @@ func main() {
 	for _, userInfo := range userInfos {
 		fmt.Printf("user info = %v\n", userInfo)
 	}
-
 }
