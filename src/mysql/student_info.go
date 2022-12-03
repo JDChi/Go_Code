@@ -14,7 +14,7 @@ const (
 	Female sex = "female"
 )
 
-type UserInfo struct {
+type StudentInfo struct {
 	Number         int    `db:"number"`
 	Name           string `db:"name"`
 	Sex            sex    `db:"sex"`
@@ -22,6 +22,12 @@ type UserInfo struct {
 	Department     string `db:"department"`
 	Major          string `db:"major"`
 	EnrollmentTime string `db:"enrollment_time"`
+}
+
+type StudentScore struct {
+	Number  int    `db:"number"`
+	Subject string `db:"subject"`
+	Score   int    `db:"score"`
 }
 
 const createStudentInfoTable = `
@@ -84,6 +90,10 @@ const selectLimit = `
    SELECT number, name, id_number, major FROM student_info LIMIT 2
 `
 
+const selectOrder = `
+   SELECT * FROM student_score ORDER BY score DESC
+`
+
 func init() {
 	s := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s", "root", "123456", "127.0.0.1:3306", "go_code", "utf8")
 	var err error
@@ -142,30 +152,40 @@ func insert() {
 }
 
 func selectTable() {
-	var userInfos []UserInfo
-	err := global.SqlxDB.Select(&userInfos, selectAll)
+	var studentInfos []StudentInfo
+	err := global.SqlxDB.Select(&studentInfos, selectAll)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("len of userInfos = %d\n", len(userInfos))
-	for _, userInfo := range userInfos {
-		fmt.Printf("user info = %v\n", userInfo)
+	fmt.Printf("len of studentInfos = %d\n", len(studentInfos))
+	for _, studentInfo := range studentInfos {
+		fmt.Printf("user info = %v is male = %v\n", studentInfo, studentInfo.Sex == Male)
 	}
 
-	err = global.SqlxDB.Select(&userInfos, selectDistinct)
+	err = global.SqlxDB.Select(&studentInfos, selectDistinct)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("distinct len of userInfos = %d\n", len(userInfos))
-	for _, userInfo := range userInfos {
-		fmt.Printf("user info = %v\n", userInfo)
+	fmt.Printf("distinct len of studentInfos = %d\n", len(studentInfos))
+	for _, studentInfo := range studentInfos {
+		fmt.Printf("user info = %v\n", studentInfo)
 	}
-	err = global.SqlxDB.Select(&userInfos, selectLimit)
+	err = global.SqlxDB.Select(&studentInfos, selectLimit)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("limit len of userInfos = %d\n", len(userInfos))
-	for _, userInfo := range userInfos {
-		fmt.Printf("user info = %v\n", userInfo)
+	fmt.Printf("limit len of studentInfos = %d\n", len(studentInfos))
+	for _, studentInfo := range studentInfos {
+		fmt.Printf("user info = %v\n", studentInfo)
+	}
+
+	var studentScores []StudentScore
+	err = global.SqlxDB.Select(&studentScores, selectOrder)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("order len of studentInfos = %d\n", len(studentScores))
+	for _, studentScore := range studentScores {
+		fmt.Printf("user info = %v\n", studentScore)
 	}
 }
