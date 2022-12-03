@@ -76,6 +76,14 @@ const selectAll = `
    SELECT * FROM student_info
 `
 
+const selectDistinct = `
+   SELECT DISTINCT department FROM student_info
+`
+
+const selectLimit = `
+   SELECT number, name, id_number, major FROM student_info LIMIT 2
+`
+
 func init() {
 	s := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s", "root", "123456", "127.0.0.1:3306", "go_code", "utf8")
 	var err error
@@ -129,6 +137,24 @@ func main() {
 		panic(err)
 	}
 	fmt.Printf("len of userInfos = %d\n", len(userInfos))
+	for _, userInfo := range userInfos {
+		fmt.Printf("user info = %v\n", userInfo)
+	}
+
+	err = global.SqlxDB.Select(&userInfos, selectDistinct)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("distinct len of userInfos = %d\n", len(userInfos))
+	for _, userInfo := range userInfos {
+		fmt.Printf("user info = %v\n", userInfo)
+	}
+
+	err = global.SqlxDB.Select(&userInfos, selectLimit)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("limit len of userInfos = %d\n", len(userInfos))
 	for _, userInfo := range userInfos {
 		fmt.Printf("user info = %v\n", userInfo)
 	}
