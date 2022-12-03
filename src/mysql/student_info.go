@@ -7,6 +7,23 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+type sex string
+
+const (
+	Male   sex = "male"
+	Female sex = "female"
+)
+
+type UserInfo struct {
+	Number         int    `db:"number"`
+	Name           string `db:"name"`
+	Sex            sex    `db:"sex"`
+	IdNumber       string `db:"id_number"`
+	Department     string `db:"department"`
+	Major          string `db:"major"`
+	EnrollmentTime string `db:"enrollment_time"`
+}
+
 const createStudentInfoTable = `
    CREATE TABLE IF NOT EXISTS student_info (
        number INT PRIMARY KEY,
@@ -55,6 +72,10 @@ const insertStudentScore = `
        (20220104, 'Physics', 46)
 `
 
+const selectAll = `
+   SELECT * FROM student_info
+`
+
 func init() {
 	s := fmt.Sprintf("%s:%s@tcp(%s)/%s?charset=%s", "root", "123456", "127.0.0.1:3306", "go_code", "utf8")
 	var err error
@@ -100,5 +121,16 @@ func main() {
 		panic(err)
 	}
 	fmt.Printf("insertStudentScore rows = %d\n", rows)
+
+	// select
+	var userInfos []UserInfo
+	err = global.SqlxDB.Select(&userInfos, selectAll)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Printf("len of userInfos = %d\n", len(userInfos))
+	for _, userInfo := range userInfos {
+		fmt.Printf("user info = %v\n", userInfo)
+	}
 
 }
