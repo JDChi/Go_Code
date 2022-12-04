@@ -55,4 +55,15 @@ func main() {
 	}
 	fmt.Printf("\n")
 	fmt.Printf("actual tmp = %v", tmp)
+	fmt.Printf("\n")
+	// if we want to change the actual value, we can try to use the index
+	for index, v := range tmp {
+		if index == 0 {
+			tmp[index].string = "c"
+		}
+		// when we print this, we can see the difference between the actual value and the copy value
+		fmt.Printf("v = %v ", v)
+	}
+	fmt.Printf("\n")
+	fmt.Printf("actual tmp = %v", tmp)
 }
