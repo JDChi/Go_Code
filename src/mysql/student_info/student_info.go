@@ -55,4 +55,7 @@ func main() {
 
 	// group by
 	groupBy()
+
+	// join
+	join()
 }
