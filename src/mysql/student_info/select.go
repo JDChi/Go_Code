@@ -3,6 +3,7 @@ package main
 import (
 	"Go_Code/src/mysql/global"
 	"fmt"
+	"github.com/jmoiron/sqlx"
 )
 
 const selectAll = `
@@ -56,6 +57,23 @@ func selectTable() {
 	}
 	fmt.Printf("order len of studentInfos = %d\n", len(studentScores))
 	for _, studentScore := range studentScores {
+		fmt.Printf("user info = %v\n", studentScore)
+	}
+
+	// using StructScan
+	fmt.Printf("use struct scan\n")
+	var studentScores1 []StudentScore
+	rows, err := global.SqlxDB.Query(selectOrder)
+	defer rows.Close()
+	if err != nil {
+		panic(err)
+	}
+	// all rows
+	err = sqlx.StructScan(rows, &studentScores1)
+	if err != nil {
+		panic(err)
+	}
+	for _, studentScore := range studentScores1 {
 		fmt.Printf("user info = %v\n", studentScore)
 	}
 }
