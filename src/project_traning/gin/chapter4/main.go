@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Go_Code/src/gin/chapter4/common"
+	"Go_Code/src/project_traning/gin/chapter4/common"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"

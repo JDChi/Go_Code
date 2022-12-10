@@ -1,6 +1,8 @@
 package response
 
-import "Go_Code/src/gin/chapter4/model"
+import (
+	"Go_Code/src/project_traning/gin/chapter4/model"
+)
 
 type UserDto struct {
 	Name      string `json:"name"`
