@@ -4,22 +4,33 @@ import (
 	"bufio"
 	"fmt"
 	"io"
+	"log"
+	"net/url"
 	"os"
+	"regexp"
+	"strconv"
 	"strings"
 	"time"
 )
+
+type Message struct {
+	TimeLocal                    time.Time
+	BytesSent                    int
+	Path, Method, Scheme, Status string
+	UpstreamTime, RequestTime    float64
+}
 
 type Reader interface {
 	Read(rc chan []byte)
 }
 
 type Writer interface {
-	Write(wc chan string)
+	Write(wc chan *Message)
 }
 
 type LogProcess struct {
-	rc     chan []byte // read channel
-	wc     chan string // write channel
+	rc     chan []byte   // read channel
+	wc     chan *Message // write channel
 	reader Reader
 	writer Writer
 }
@@ -60,7 +71,7 @@ type WriteToInfluxDB struct {
 	dbSn string // database data source
 }
 
-func (w WriteToInfluxDB) Write(wc chan string) {
+func (w WriteToInfluxDB) Write(wc chan *Message) {
 	for v := range wc {
 		fmt.Println(v)
 	}
@@ -68,8 +79,50 @@ func (w WriteToInfluxDB) Write(wc chan string) {
 }
 
 func (l *LogProcess) Process() {
+	// 172.0.0.12 - - [04/Mar/2018:13:49:53 +0000] http "GET /foo?query=t HTTP/1.0" 200 2133 "-" "KeepAliveClient" "-" 1.005 1.854
+	// ([\d.]+)\s+([^ \[]+)\s+([^ \[]+)\s+\[([^\]]+)\]\s+([a-z]+)\s+\"([^"]+)\"\s+(\d{3})\s+(\d+)\s+\"([^"]+)\"\s+\"(.*?)\"\s+\"([\d\.-]+)\"\s+([\d\.-]+)\s+([\d\.-]+)
+	r := regexp.MustCompile(`([\d.]+)\s+([^ \[]+)\s+([^ \[]+)\s+\[([^]]+)]\s+([a-z]+)\s+"([^"]+)"\s+(\d{3})\s+(\d+)\s+"([^"]+)"\s+"(.*?)"\s+"([\d.-]+)"\s+([\d.-]+)\s+([\d.-]+)`)
+
+	loc, _ := time.LoadLocation("Asia/Shanghai")
 	for v := range l.rc {
-		l.wc <- strings.ToUpper(string(v))
+		ret := r.FindStringSubmatch(string(v))
+		if len(ret) != 14 {
+			log.Fatalln("FindStringSubmatch fail: ", string(v))
+			continue
+		}
+
+		message := &Message{}
+		t, err := time.ParseInLocation("02/Jan/2006:15:04:05 +0000", ret[4], loc)
+		if err != nil {
+			log.Fatalln("ParseInLocation fail: ", err.Error(), ret[4])
+		}
+
+		message.TimeLocal = t
+		byteSent, _ := strconv.Atoi(ret[8])
+		message.BytesSent = byteSent
+
+		// Get /foo?query=t HTTP/1.0
+		reqSli := strings.Split(ret[6], " ")
+		if len(reqSli) != 3 {
+			log.Fatalln("strings.Split fail", ret[6])
+			continue
+		}
+
+		url, err := url.Parse(reqSli[1])
+		if err != nil {
+			log.Fatalln("url parse fail:", err)
+			continue
+		}
+
+		message.Path = url.Path
+		message.Scheme = ret[5]
+		message.Status = ret[7]
+
+		upstreamTime, _ := strconv.ParseFloat(ret[12], 64)
+		requestTime, _ := strconv.ParseFloat(ret[13], 64)
+		message.UpstreamTime = upstreamTime
+		message.RequestTime = requestTime
+		l.wc <- message
 	}
 
 }
@@ -80,7 +133,7 @@ func main() {
 
 	lp := &LogProcess{
 		rc:     make(chan []byte),
-		wc:     make(chan string),
+		wc:     make(chan *Message),
 		reader: reader,
 		writer: writer,
 	}
@@ -89,5 +142,5 @@ func main() {
 	go lp.Process()
 	go lp.writer.Write(lp.wc)
 
-	time.Sleep(30 * time.Second)
+	time.Sleep(60 * time.Second)
 }
