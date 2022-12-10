@@ -1,7 +1,7 @@
 package response
 
 import (
-	"Go_Code/src/project_traning/gin/chapter4/model"
+	"Go_Code/src/project_training/gin/chapter4/model"
 )
 
 type UserDto struct {
