@@ -11,5 +11,6 @@ func main() {
 	//MistakeNoLockUnlockPairing()
 	//MistakeCopyUsedMutex()
 	//mutex.MistakeReentrantLock()
-	mutex.MistakeDeadLock()
+	//mutex.MistakeDeadLock()
+	mutex.TryLockMutexTest2()
 }
