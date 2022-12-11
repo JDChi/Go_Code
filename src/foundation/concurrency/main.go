@@ -1,6 +1,6 @@
 package main
 
-import "Go_Code/src/foundation/concurrency/mutex"
+import "Go_Code/src/foundation/concurrency/rwmutex"
 
 func main() {
 	// mutex
@@ -12,5 +12,6 @@ func main() {
 	//MistakeCopyUsedMutex()
 	//mutex.MistakeReentrantLock()
 	//mutex.MistakeDeadLock()
-	mutex.TryLockMutexTest2()
+	//mutex.TryLockMutexTest2()
+	rwmutex.TestRWMutex()
 }
