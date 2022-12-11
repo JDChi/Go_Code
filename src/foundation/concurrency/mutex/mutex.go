@@ -1,11 +1,11 @@
-package main
+package mutex
 
 import (
 	"fmt"
 	"sync"
 )
 
-func MutexWithoutMutex() {
+func WithoutMutex() {
 	var count = 0
 	var wg sync.WaitGroup
 	wg.Add(10)
@@ -19,7 +19,7 @@ func MutexWithoutMutex() {
 		}()
 	}
 	wg.Wait()
-	fmt.Println("MutexWithoutMutex counter count: ", count)
+	fmt.Println("WithoutMutex counter count: ", count)
 
 }
 
@@ -45,7 +45,7 @@ func (counter *SafeCounter) Count() uint64 {
 	return counter.count
 }
 
-func MutexFixWithMutex() {
+func FixWithMutex() {
 	var counter Counter
 	var safeCounter SafeCounter
 	var wg sync.WaitGroup
@@ -64,6 +64,6 @@ func MutexFixWithMutex() {
 		}()
 	}
 	wg.Wait()
-	fmt.Println("MutexFixWithMutex counter count: ", counter.Count)
-	fmt.Println("MutexFixWithMutex safeCounter count: ", safeCounter.count)
+	fmt.Println("FixWithMutex counter count: ", counter.Count)
+	fmt.Println("FixWithMutex safeCounter count: ", safeCounter.count)
 }

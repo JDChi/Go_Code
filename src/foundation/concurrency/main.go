@@ -1,7 +1,15 @@
 package main
 
+import "Go_Code/src/foundation/concurrency/mutex"
+
 func main() {
 	// mutex
-	MutexWithoutMutex()
-	MutexFixWithMutex()
+	//WithoutMutex()
+	//FixWithMutex()
+
+	// mutex mistake
+	//MistakeNoLockUnlockPairing()
+	//MistakeCopyUsedMutex()
+	//mutex.MistakeReentrantLock()
+	mutex.MistakeDeadLock()
 }
