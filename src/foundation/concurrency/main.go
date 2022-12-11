@@ -1,6 +1,6 @@
 package main
 
-import "Go_Code/src/foundation/concurrency/rwmutex"
+import "Go_Code/src/foundation/concurrency/waitgroup"
 
 func main() {
 	// mutex
@@ -13,5 +13,13 @@ func main() {
 	//mutex.MistakeReentrantLock()
 	//mutex.MistakeDeadLock()
 	//mutex.TryLockMutexTest2()
-	rwmutex.TestRWMutex()
+	//rwmutex.TestRWMutex()
+
+	// waitgroup
+	//waitgroup.CommonUse()
+	// waitgroupmistake
+	//waitgroup.MistakeAdd()
+	//waitgroup.MistakeDone()
+	//waitgroup.MistakeAddTiming()
+	waitgroup.MistakeReuseWaitGroupBeforeDone()
 }
