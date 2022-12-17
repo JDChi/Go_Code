@@ -1,6 +1,6 @@
 package main
 
-import "Go_Code/src/foundation/concurrency/waitgroup"
+import "Go_Code/src/foundation/concurrency/once"
 
 func main() {
 	// mutex
@@ -21,5 +21,10 @@ func main() {
 	//waitgroup.MistakeAdd()
 	//waitgroup.MistakeDone()
 	//waitgroup.MistakeAddTiming()
-	waitgroup.MistakeReuseWaitGroupBeforeDone()
+	//waitgroup.MistakeReuseWaitGroupBeforeDone()
+
+	// once
+	//once.TestOnce()
+	//once.MistakeDeathLock()
+	once.MistakeUnInit()
 }
