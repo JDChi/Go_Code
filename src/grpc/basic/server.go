@@ -20,8 +20,11 @@ func main() {
 		panic(err)
 	}
 
+	var opts []grpc.ServerOption
+	opts = append(opts, grpc.UnaryInterceptor(AuthInterceptor))
+
 	// 创建 grpc 服务
-	grpcServer := grpc.NewServer()
+	grpcServer := grpc.NewServer(opts...)
 	// 注册我们编写的服务
 	helloPb.RegisterSayHelloServer(grpcServer, &Server{})
 	// 启动服务
@@ -34,6 +37,34 @@ func main() {
 
 func (s *Server) SayHello(ctx context.Context, req *helloPb.HelloReq) (*helloPb.HelloResp, error) {
 	// 获取元数据的信息，实际是这部分 token 的东西写在拦截器里
+	//md, ok := metadata.FromIncomingContext(ctx)
+	//if !ok {
+	//	return nil, errors.New("no token")
+	//}
+	//
+	//fmt.Printf("md = %v", md)
+	//var (
+	//	appId, appKey string
+	//)
+	//
+	//if v, ok := md["appid"]; ok {
+	//	appId = v[0]
+	//}
+	//
+	//if v, ok := md["appkey"]; ok {
+	//	appKey = v[0]
+	//}
+	//fmt.Printf("appId = %v, appKey = %v\n", appId, appKey)
+	//if appId != "hello" || appKey != "123123" {
+	//	return nil, errors.New("token wrong")
+	//}
+
+	return &helloPb.HelloResp{
+		Msg: "hello " + req.GetName()}, nil
+}
+
+// AuthInterceptor token 拦截器
+func AuthInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return nil, errors.New("no token")
@@ -55,7 +86,6 @@ func (s *Server) SayHello(ctx context.Context, req *helloPb.HelloReq) (*helloPb.
 	if appId != "hello" || appKey != "123123" {
 		return nil, errors.New("token wrong")
 	}
-
-	return &helloPb.HelloResp{
-		Msg: "hello " + req.GetName()}, nil
+	// 交给下面继续处理
+	return handler(ctx, req)
 }

@@ -15,7 +15,7 @@ type ClientTokenAuth struct {
 func (auth *ClientTokenAuth) GetRequestMetadata(ctx context.Context, uri ...string) (map[string]string, error) {
 	return map[string]string{
 		"appId":  "hello",
-		"appKey": "123123",
+		"appKey": "123",
 	}, nil
 }
 
