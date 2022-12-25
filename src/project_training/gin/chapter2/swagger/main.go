@@ -1,8 +1,8 @@
 package main
 
 import (
+	_ "Go_Code/src/project_training/gin/chapter2/swagger/docs" // 需要添加 docs 路径引用
 	"fmt"
-	_ "gin_learning/src/chapter2/swagger/docs" // 需要添加 docs 路径引用
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
