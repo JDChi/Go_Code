@@ -13,6 +13,7 @@ func init() {
 		DB:          0,  // use default DB
 		ReadTimeout: -1,
 	})
+
 	pong, err := redisCli.Ping(context.Background()).Result()
 	if err != nil {
 		panic(err)
@@ -22,6 +23,10 @@ func init() {
 
 func main() {
 
-	basicUsage()
-
+	//basicUsage()
+	//customCmd()
+	//opList()
+	//opString()
+	//opPipelined()
+	opTxPipelined()
 }

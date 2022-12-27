@@ -1,14 +1,13 @@
 package main
 
 import (
-	"context"
 	"errors"
 	"fmt"
 	"github.com/go-redis/redis/v8"
 )
 
 func basicUsage() {
-	var ctx = context.Background()
+
 	var key = "go_code_basic"
 
 	getResult, errGet := redisCli.Get(ctx, "go_code_basic1").Result()
@@ -16,7 +15,7 @@ func basicUsage() {
 		fmt.Printf("key is not exist\n")
 	}
 
-	setResult, errSet := redisCli.Set(ctx, key, "hello", -1).Result()
+	setResult, errSet := redisCli.Set(ctx, key, "hello", redis.KeepTTL).Result()
 	if errSet != nil {
 		panic(errSet)
 	}
