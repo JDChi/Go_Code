@@ -39,7 +39,11 @@ func main() {
 	// err := insertMany(ctx, person1Col)
 	// err := findOne(ctx, "3", person1Col)
 	// err := find(ctx, person1Col)
-	err := updateOne(ctx, person1Col, "2")
+	// err := findProjection(ctx, person1Col)
+	// err := findIn(ctx, person1Col)
+	// err := findNIn(ctx, person1Col)
+	err := findOr(ctx, person1Col)
+	// err := updateOne(ctx, person1Col, "2")
 	if err != nil {
 		fmt.Println(err)
 		return

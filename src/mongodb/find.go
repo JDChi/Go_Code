@@ -6,6 +6,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func findOne(ctx context.Context, id string, col *mongo.Collection) error {
@@ -43,4 +44,71 @@ func find(ctx context.Context, col *mongo.Collection) error {
 	}
 	fmt.Println(movies)
 	return nil
+}
+
+// 查询指定的条件
+func findProjection(ctx context.Context, col *mongo.Collection) error {
+	// 只返回 title，不返回 id
+	option := options.Find().SetProjection(bson.D{{"title", 1}, {"_id", 0}})
+	// 查询全部
+	cur, err := col.Find(ctx, bson.D{}, option)
+	if err != nil {
+		return err
+	}
+	var movies = make([]Movie, 0)
+	err = cur.All(ctx, &movies)
+	if err != nil {
+		return err
+	}
+	fmt.Println(movies)
+	return nil
+}
+
+// 使用 in 条件查询
+func findIn(ctx context.Context, col *mongo.Collection) error {
+	// 查询 2 和 3
+	cur, err := col.Find(ctx, bson.D{{"_id", bson.D{{"$in", bson.A{"2", "3"}}}}})
+	if err != nil {
+		return err
+	}
+	var movies = make([]Movie, 0)
+	err = cur.All(ctx, &movies)
+	if err != nil {
+		return err
+	}
+	fmt.Println(movies)
+	return nil
+}
+
+// 使用 nin 条件查询
+func findNIn(ctx context.Context, col *mongo.Collection) error {
+	// 查询不是 2 和 3
+	cur, err := col.Find(ctx, bson.D{{"_id", bson.D{{"$nin", bson.A{"2", "3"}}}}})
+	if err != nil {
+		return err
+	}
+	var movies = make([]Movie, 0)
+	err = cur.All(ctx, &movies)
+	if err != nil {
+		return err
+	}
+	fmt.Println(movies)
+	return nil
+
+}
+
+func findOr(ctx context.Context, col *mongo.Collection) error {
+	// 查询 2 或者 4
+	cur, err := col.Find(ctx, bson.D{{"$or", bson.A{bson.D{{"_id", "2"}}, bson.D{{"_id", "4"}}}}})
+	if err != nil {
+		return err
+	}
+	var movies = make([]Movie, 0)
+	err = cur.All(ctx, &movies)
+	if err != nil {
+		return err
+	}
+	fmt.Println(movies)
+	return nil
+
 }
