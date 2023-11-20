@@ -64,6 +64,22 @@ func findProjection(ctx context.Context, col *mongo.Collection) error {
 	return nil
 }
 
+func findElemMatch(ctx context.Context, col *mongo.Collection) error {
+	// 使用 elemMatch 对内嵌文档进行匹配，这里搜索有台湾地区的剧本
+	filter := bson.D{{"areas", bson.D{{"$elemMatch", bson.D{{"locale", "zh-TW"}}}}}}
+	cur, err := col.Find(ctx, filter)
+	if err != nil {
+		return err
+	}
+	var scenarios = make([]ScenarioInfo, 0)
+	err = cur.All(ctx, &scenarios)
+	if err != nil {
+		return err
+	}
+	fmt.Println(scenarios)
+	return nil
+}
+
 // 使用 in 条件查询
 func findIn(ctx context.Context, col *mongo.Collection) error {
 	// 查询 2 和 3
