@@ -34,12 +34,14 @@ func main() {
 	testDB := mongoCli.Database("test")
 
 	// person1Col := testDB.Collection("person1")
-	scenarioCol := testDB.Collection("scenario")
+	// scenarioCol := testDB.Collection("scenario")
+	userCol := testDB.Collection("user")
 
 	// err := insertOne(ctx, person1Col)
+	// err := insertOne1(ctx, userCol)
 	// err := insertMany(ctx, person1Col)
 	// err := insertMany1(ctx, scenarioCol)
-	err := findElemMatch(ctx, scenarioCol)
+	// err := findElemMatch(ctx, scenarioCol)
 	// err := findOne(ctx, "3", person1Col)
 	// err := find(ctx, person1Col)
 	// err := findProjection(ctx, person1Col)
@@ -47,6 +49,8 @@ func main() {
 	// err := findNIn(ctx, person1Col)
 	// err := findOr(ctx, person1Col)
 	// err := updateOne(ctx, person1Col, "2")
+	// err := createIndex(ctx, userCol)
+	err := dropIndex(ctx, userCol)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -71,4 +75,11 @@ type Area struct {
 	Title        string `bson:"title"`        // 标题
 	Introduction string `bson:"introduction"` // 简介
 	// Weight       uint32 `bson:"weight"`       // 权重
+}
+
+type User struct {
+	ID      uint64 `bson:"_id"`
+	Name    string `bson:"name"`
+	Age     uint32 `bson:"age"`
+	Created int64  `bson:"created"`
 }

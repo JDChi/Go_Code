@@ -2,6 +2,9 @@ package main
 
 import (
 	"context"
+	"math/rand"
+	"strconv"
+	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -13,6 +16,23 @@ func insertOne(ctx context.Context, col *mongo.Collection) error {
 	}
 	_, errInsert := col.InsertOne(ctx, movie)
 	return errInsert
+}
+
+func insertOne1(ctx context.Context, col *mongo.Collection) error {
+	for i := 0; i < 1000000; i++ {
+		user := User{
+			ID:      uint64(i),
+			Name:    "user" + strconv.Itoa(i),
+			Age:     rand.Uint32(),
+			Created: time.Now().Unix(),
+		}
+		_, errInsert := col.InsertOne(ctx, user)
+		if errInsert != nil {
+			return errInsert
+		}
+	}
+	return nil
+
 }
 
 func insertMany(ctx context.Context, col *mongo.Collection) error {

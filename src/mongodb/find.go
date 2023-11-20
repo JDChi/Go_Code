@@ -83,7 +83,7 @@ func findElemMatch(ctx context.Context, col *mongo.Collection) error {
 // 使用 in 条件查询
 func findIn(ctx context.Context, col *mongo.Collection) error {
 	// 查询 2 和 3
-	cur, err := col.Find(ctx, bson.D{{"_id", bson.D{{"$in", bson.A{"2", "3"}}}}})
+	cur, err := col.Find(ctx, bson.D{{"_id", bson.D{{"$in", bson.A{2, 3}}}}})
 	if err != nil {
 		return err
 	}
