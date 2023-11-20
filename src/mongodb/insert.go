@@ -25,3 +25,25 @@ func insertMany(ctx context.Context, col *mongo.Collection) error {
 	})
 	return err
 }
+
+func insertMany1(ctx context.Context, col *mongo.Collection) error {
+	scenario := ScenarioInfo{Id: 3, Areas: []Area{
+		{Locale: "en", Title: "en_title", Introduction: "en_intro"},
+		{Locale: "zh", Title: "中文标题", Introduction: "中文介绍"},
+	}}
+	scenario1 := ScenarioInfo{Id: 4, Areas: []Area{
+		{Locale: "en", Title: "en_title1", Introduction: "en_intro_1"},
+		{Locale: "zh-TW", Title: "中文标题1", Introduction: "中文介绍1"},
+	}}
+	scenario2 := ScenarioInfo{Id: 5, Areas: []Area{
+		{Locale: "en", Title: "en_title2", Introduction: "en_intro_2"},
+		{Locale: "jp", Title: "日文标题2", Introduction: "日文介绍2"},
+	}}
+
+	_, err := col.InsertMany(ctx, []any{
+		scenario,
+		scenario1,
+		scenario2,
+	})
+	return err
+}
